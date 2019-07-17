@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    tools:context=".MovieActivity">
+
+    <ImageView
+        android:id="@+id/MovieThumbnail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:src="@drawable/default_img"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Title"
+        app:layout_constraintStart_toEndOf="@id/MovieThumbnail"
+        app:layout_constraintTop_toTopOf="parent"
+
+        />
+    <TextView
+        android:id="@+id/Titletxt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:gravity="left"
+        android:hint="@string/Title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/OriginalName"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/OriginalName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Original_Name"
+
+        app:layout_constraintStart_toEndOf="@id/MovieThumbnail"
+        app:layout_constraintTop_toBottomOf="@id/Titletxt"
+
+        />
+    <TextView
+        android:id="@+id/OriginalNametxt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:gravity="left"
+        android:hint="@string/Original_Name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/OriginalName"
+        app:layout_constraintTop_toBottomOf="@id/Titletxt" />
+
+    <TextView
+        android:id="@+id/ReleaseDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Release_Date"
+
+        app:layout_constraintStart_toEndOf="@id/MovieThumbnail"
+        app:layout_constraintTop_toBottomOf="@id/OriginalNametxt" />
+
+    <TextView
+        android:id="@+id/ReleaseDatetxt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:gravity="left"
+        android:hint="@string/Release_Date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/OriginalName"
+        app:layout_constraintTop_toBottomOf="@id/OriginalNametxt" />
+    <TextView
+        android:id="@+id/Rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Rating"
+
+        app:layout_constraintStart_toEndOf="@id/MovieThumbnail"
+        app:layout_constraintTop_toBottomOf="@id/ReleaseDatetxt" />
+
+    <TextView
+        android:id="@+id/Ratingtxt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:gravity="left"
+        android:hint="@string/Rating"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/OriginalName"
+        app:layout_constraintTop_toBottomOf="@id/ReleaseDatetxt" />
+    <TextView
+        android:id="@+id/Language"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Language"
+
+        app:layout_constraintStart_toEndOf="@id/MovieThumbnail"
+        app:layout_constraintTop_toBottomOf="@id/Ratingtxt" />
+
+    <TextView
+        android:id="@+id/Languagetxt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:gravity="left"
+        android:hint="@string/Language"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/OriginalName"
+        app:layout_constraintTop_toBottomOf="@id/Ratingtxt" />
+    <TextView
+        android:id="@+id/Adult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Adult"
+
+        app:layout_constraintStart_toEndOf="@id/MovieThumbnail"
+        app:layout_constraintTop_toBottomOf="@id/Languagetxt" />
+
+    <TextView
+        android:id="@+id/Adulttxt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:gravity="left"
+        android:hint="@string/Adult"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/OriginalName"
+        app:layout_constraintTop_toBottomOf="@id/Languagetxt" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/barrier">
+
+        <TextView
+            android:id="@+id/Overview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/Overview" />
+    </ScrollView>
+
+    <android.support.constraint.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="MovieThumbnail,Adulttxt"
+        />
+</android.support.constraint.ConstraintLayout>
