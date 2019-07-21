@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.movies.API.Movies;
+import com.example.movies.API.getData;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -18,9 +20,9 @@ import java.util.List;
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder> {
 
     private Context context;
-    private List<Movies> movies;
+    private List<Movies.MoviesBean> movies;
 
-    public MoviesAdapter(Context context, List<Movies> movies) {
+    public MoviesAdapter(Context context, List<Movies.MoviesBean> movies) {
         this.context = context;
         this.movies = movies;
 

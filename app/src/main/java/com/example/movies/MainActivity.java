@@ -11,6 +11,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.movies.API.Movies;
+import com.example.movies.API.getData;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,11 +37,10 @@ public class MainActivity extends AppCompatActivity{
         recyclerView.setLayoutManager(new GridLayoutManager(this,3));
         recyclerView.setHasFixedSize(true);
 
-
         dialog=new ProgressDialog(this);
         dialog.setMessage("Loading");
         dialog.show();
-       getMostPopular(  new ArrayList<Movies>(),1);
+        getMostPopular(  new ArrayList<Movies.MoviesBean>(),1);
 
 
 
@@ -57,11 +59,11 @@ public class MainActivity extends AppCompatActivity{
         switch (item.getItemId()){
             case R.id.Popular:
                 dialog.show();
-                getMostPopular(new ArrayList<Movies>(),1);
+                getMostPopular(new ArrayList<Movies.MoviesBean>(),1);
                 return true;
             case R.id.Rating:
                 dialog.show();
-                getTopRated(new ArrayList<Movies>(),1);
+                getTopRated(new ArrayList<Movies.MoviesBean>(),1);
                 return  true;
             default:
                 return true;
@@ -71,7 +73,7 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
-    void getTopRated(final List<Movies> movies,final int page){
+    void getTopRated(final List<Movies.MoviesBean> movies, final int page){
 
         Retrofit retrofit=new Retrofit.Builder()
                 .baseUrl(getData.Base_URL)
@@ -79,12 +81,12 @@ public class MainActivity extends AppCompatActivity{
                 .build();
 
         getData data=retrofit.create(getData.class);
-        Call <MoviesCall> call=data.TopRatedMovies(String.valueOf(page));
+        Call <Movies> call=data.TopRatedMovies(String.valueOf(page));
 
-        call.enqueue(new Callback<MoviesCall>() {
+        call.enqueue(new Callback<Movies>() {
             @Override
-            public void onResponse(Call<MoviesCall> call, Response<MoviesCall> response) {
-                MoviesCall moviesCall=response.body();
+            public void onResponse(Call<Movies> call, Response<Movies> response) {
+                Movies moviesCall=response.body();
                 if(moviesCall==null)
                     return;
                 movies.addAll(moviesCall.getResults());
@@ -107,14 +109,14 @@ public class MainActivity extends AppCompatActivity{
             }
 
             @Override
-            public void onFailure(Call<MoviesCall> call, Throwable t) {
+            public void onFailure(Call<Movies> call, Throwable t) {
                 Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.e("Error",t.getMessage());
+                Log.e("TopRatedError",t.getMessage());
             }
         });
     }
 
-    void getMostPopular(final List<Movies> movies,final int page){
+    void getMostPopular(final List<Movies.MoviesBean> movies, final int page){
 
         Retrofit retrofit=new Retrofit.Builder()
                 .baseUrl(getData.Base_URL)
@@ -122,12 +124,12 @@ public class MainActivity extends AppCompatActivity{
                 .build();
 
         getData data=retrofit.create(getData.class);
-        Call <MoviesCall> call=data.MostPopularMovies(String.valueOf(page));
+        Call <Movies> call=data.MostPopularMovies(String.valueOf(page));
 
-        call.enqueue(new Callback<MoviesCall>() {
+        call.enqueue(new Callback<Movies>() {
             @Override
-            public void onResponse(Call<MoviesCall> call, Response<MoviesCall> response) {
-                MoviesCall moviesCall=response.body();
+            public void onResponse(Call<Movies> call, Response<Movies> response) {
+                Movies moviesCall=response.body();
 
                 if(moviesCall==null)
                     return;
@@ -150,9 +152,9 @@ public class MainActivity extends AppCompatActivity{
             }
 
             @Override
-            public void onFailure(Call<MoviesCall> call, Throwable t) {
+            public void onFailure(Call<Movies> call, Throwable t) {
                 Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.e("Error",t.getMessage());
+                Log.e("MostPopularError",t.getMessage());
             }
         });
     }
