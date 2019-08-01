@@ -1,12 +1,11 @@
 package com.example.movies;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.movies.API.Reviews;
@@ -52,6 +51,7 @@ public class reviews_trailers_activity extends AppCompatActivity {
             GetReviews(new ArrayList<Reviews.ResultsBean>() ,1);
 
         }else{
+            setTitle(R.string.video);
             GetVideos(new ArrayList<Videos.ResultsBean>());
         }
 
@@ -128,7 +128,7 @@ public class reviews_trailers_activity extends AppCompatActivity {
                 }
                 videosList.addAll(videos.getResults());
                 videoAdapter=new VideoAdapter(reviews_trailers_activity.this,videosList);
-                 mRecyclerView.setAdapter(videoAdapter);
+                mRecyclerView.setAdapter(videoAdapter);
 
 
             }

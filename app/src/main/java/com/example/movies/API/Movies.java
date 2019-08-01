@@ -3,6 +3,10 @@ package com.example.movies.API;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +55,8 @@ public class Movies {
         this.results = results;
     }
 
+
+    @Entity(tableName = "movies")
     public static class MoviesBean implements Parcelable {
         /**
          * vote_count : 2068
@@ -69,20 +75,38 @@ public class Movies {
          * release_date : 1995-10-20
          */
 
+        @Ignore
         private int vote_count;
+        @PrimaryKey
         private int id;
+        @Ignore
         private boolean video;
         private float vote_average;
         private String title;
+        @Ignore
         private double popularity;
         private String poster_path;
         private String original_language;
         private String original_title;
+        @Ignore
         private String backdrop_path;
         private boolean adult;
         private String overview;
         private String release_date;
+        @Ignore
         private List<Integer> genre_ids;
+
+        public MoviesBean(int id,float vote_average, String title, String poster_path, String original_language, String original_title, boolean adult, String overview, String release_date) {
+            this.id = id;
+            this.vote_average=vote_average;
+            this.title = title;
+            this.poster_path = poster_path;
+            this.original_language = original_language;
+            this.original_title = original_title;
+            this.adult = adult;
+            this.overview = overview;
+            this.release_date = release_date;
+        }
 
         public int getVote_count() {
             return vote_count;
@@ -224,9 +248,8 @@ public class Movies {
             dest.writeList(this.genre_ids);
         }
 
-        public MoviesBean() {
-        }
 
+        @Ignore
         protected MoviesBean(Parcel in) {
             this.vote_count = in.readInt();
             this.id = in.readInt();
@@ -257,4 +280,5 @@ public class Movies {
             }
         };
     }
+
 }

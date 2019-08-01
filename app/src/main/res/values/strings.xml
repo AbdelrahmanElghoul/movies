@@ -18,4 +18,8 @@
     <string name="Type">type</string>
     <string name="Site">site</string>
     <string name="video">trailer</string>
+
+    <string name="MostPopular">Most popular</string>
+    <string name="TopRate">Top Rated</string>
+    <string name="Favourite">Favourite</string>
 </resources>

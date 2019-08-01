@@ -19,6 +19,11 @@
                 android:title="Most Popular"
                 app:showAsAction="never"
                 />
+            <item
+                android:id="@+id/favourite"
+                android:title="favourite"
+                app:showAsAction="never"
+                />
 
 
         </menu>

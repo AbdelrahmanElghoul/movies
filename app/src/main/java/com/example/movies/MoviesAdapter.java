@@ -2,9 +2,9 @@ package com.example.movies;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,11 +21,10 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
 
     private Context context;
     private List<Movies.MoviesBean> movies;
-
+    public static int Position=0;
     public MoviesAdapter(Context context, List<Movies.MoviesBean> movies) {
         this.context = context;
         this.movies = movies;
-
     }
 
     @NonNull
@@ -39,6 +38,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
     @Override
     public void onBindViewHolder(@NonNull MoviesViewHolder ViewHolder, final int position) {
 
+        Position=position;
         Picasso.get().load(getData.PosterBaseURL+movies.get(position).getPoster_path()).into(ViewHolder.Poster);
         ViewHolder.Name.setText(movies.get(position).getTitle()+"\n("+movies.get(position).getRelease_year()+")");
         ViewHolder.Rate.setText(String.valueOf(movies.get(position).getVote_average()));
@@ -75,5 +75,9 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
             Name=itemView.findViewById(R.id.txtName);
             cardView=itemView.findViewById(R.id.cardView);
         }
+    }
+
+    public void setMovies(List<Movies.MoviesBean> movies) {
+        this.movies = movies;
     }
 }
