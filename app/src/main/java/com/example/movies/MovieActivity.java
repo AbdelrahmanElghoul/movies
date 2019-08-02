@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -100,6 +101,11 @@ public class MovieActivity extends AppCompatActivity {
     }
 
     public void btnReviews(View view) {
+        if(!new Internet().hasInternetAccess(this))
+        {
+            Toast.makeText(this, "you must be online to see reviews", Toast.LENGTH_SHORT).show();
+            return;
+        }
         Intent intent=new Intent(this,reviews_trailers_activity.class);
         intent.putExtra("id",movies.getId());
         intent.putExtra("type",String.valueOf(R.string.Reviews));
@@ -107,6 +113,11 @@ public class MovieActivity extends AppCompatActivity {
     }
 
     public void btnTrailers(View view) {
+        if(!new Internet().hasInternetAccess(this))
+        {
+            Toast.makeText(this, "you must be online to see trailers", Toast.LENGTH_SHORT).show();
+            return;
+        }
         Intent intent=new Intent(this,reviews_trailers_activity.class);
         intent.putExtra("id",movies.getId());
         intent.putExtra("type",String.valueOf(R.string.video));
