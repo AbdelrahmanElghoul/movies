@@ -16,7 +16,7 @@ public interface moviesDAO {
 
 
     @Query("select * from movies")
-    List<Movies.MoviesBean> loadAll();
+    LiveData<List<Movies.MoviesBean>> loadAll();
 
     @Insert
     void insertMovie(Movies.MoviesBean userData);

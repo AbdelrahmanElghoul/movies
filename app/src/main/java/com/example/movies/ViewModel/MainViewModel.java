@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.movies.API.Movies;
@@ -26,7 +27,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainViewModel extends AndroidViewModel {
 
     private static final String TAG=MainViewModel.class.getSimpleName();
-
+    private LiveData<List<Movies.MoviesBean>> Favourite;
     private MutableLiveData<List<Movies.MoviesBean>> movies;
     private Call <Movies> call;
     private int page=1;
@@ -39,10 +40,10 @@ public class MainViewModel extends AndroidViewModel {
         this.type = type;
     }
 
-    public int getPage() {
+    private int getPage() {
         return page;
     }
-    public void setPage(int page) {
+    private void setPage(int page) {
         this.page = page;
     }
 
@@ -50,7 +51,6 @@ public class MainViewModel extends AndroidViewModel {
         Log.d(TAG,"Init");
         if(call!=null)
             call.cancel();
-
         movies.setValue(new ArrayList<Movies.MoviesBean>());
         Log.d(TAG,String.valueOf(getMovies().getValue().size()));
         page=1;
@@ -60,11 +60,19 @@ public class MainViewModel extends AndroidViewModel {
     public MainViewModel(@NonNull Application application) {
         super(application);
         movies= new MutableLiveData<>();
+        Favourite=new MutableLiveData<>();
+        appExecuters.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                Favourite=appDatabase.getInstance(getApplication()).moviesDAO().loadAll();
+            }
+        });
         Log.d(TAG,"retrieving favourite from db");
         Init();
     }
 
-    public MutableLiveData<List<Movies.MoviesBean>> getMovies() {
+
+    public LiveData<List<Movies.MoviesBean>> getMovies() {
         return movies;
     }
 
@@ -150,16 +158,8 @@ public class MainViewModel extends AndroidViewModel {
             }
         });
     }
-    public void getFavourite(){
-        appExecuters.getInstance().diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                final List<Movies.MoviesBean> tmp=appDatabase.getInstance(getApplication()).moviesDAO().loadAll();
-                movies.postValue(tmp);
-            }
-
-        });
-
+    public LiveData<List<Movies.MoviesBean>> getFavourite(){
+       return Favourite;
     }
 
 }

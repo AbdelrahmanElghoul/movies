@@ -1,112 +1,124 @@
 package com.example.movies;
 
-import android.app.ProgressDialog;
-import android.nfc.Tag;
 import android.os.Bundle;
-import android.os.Parcelable;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.movies.API.Movies;
-import com.example.movies.API.getData;
 import com.example.movies.ViewModel.MainViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
 
     MoviesAdapter moviesAdapter;
     RecyclerView recyclerView;
-    List<Movies.MoviesBean> moviesBeansList;
     MainViewModel mainViewModel;
-    String TAG=MainActivity.class.getSimpleName();
+    List<Movies.MoviesBean> favourite;
+    String TAG = MainActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        recyclerView=findViewById(R.id.Recycler);
+        recyclerView = findViewById(R.id.Recycler);
 
-        recyclerView.setLayoutManager(new GridLayoutManager(this,3));
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         recyclerView.setHasFixedSize(true);
-        mainViewModel=ViewModelProviders.of(this).get(MainViewModel.class);
-
-        moviesBeansList=new ArrayList<>();
-
-        if(!new Internet().hasInternetAccess(this) || mainViewModel.getType().equals(getString(R.string.Favourite))){
-            mainViewModel.getFavourite();
-        }else if(mainViewModel.getType().equals(getString(R.string.MostPopular)))
+        mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        favourite = new ArrayList<>();
+        if (!new Internet().hasInternetAccess(this) || mainViewModel.getType().equals(getString(R.string.Favourite))) {
+            getFavourite();
+        } else if (mainViewModel.getType().equals(getString(R.string.MostPopular)))
             mainViewModel.getMostPopular();
-        else if (mainViewModel.getType().equals(getString(R.string.TopRate)))
+        else
             mainViewModel.getTopRated();
 
         mainViewModel.getMovies().observe(this, new Observer<List<Movies.MoviesBean>>() {
             @Override
             public void onChanged(List<Movies.MoviesBean> moviesBeans) {
-
-                Log.d(TAG,"Listener size "+moviesBeans.size());
-                if(moviesAdapter==null) {
-                    moviesAdapter=new MoviesAdapter(getApplicationContext(),moviesBeans);
-                    recyclerView.setAdapter(moviesAdapter);
-                }else {
-                    moviesAdapter.setMovies(moviesBeans);
-                    moviesAdapter.notifyDataSetChanged();
+                Log.d(TAG, "Movie Listener size " + moviesBeans.size());
+                if (!mainViewModel.getType().equals(getString(R.string.Favourite))) {
+                    if (moviesAdapter == null) {
+                        moviesAdapter = new MoviesAdapter(MainActivity.this, moviesBeans);
+                        recyclerView.setAdapter(moviesAdapter);
+                    } else {
+                        moviesAdapter.setMovies(moviesBeans);
+                    }
                 }
             }
         });
+
+
+        mainViewModel.getFavourite().observe(this, new Observer<List<Movies.MoviesBean>>() {
+            @Override
+            public void onChanged(List<Movies.MoviesBean> moviesBeans) {
+                favourite = moviesBeans;
+                Log.d(TAG, "Favourite Listener size " + moviesBeans.size());
+                if (mainViewModel.getType().equals(getString(R.string.Favourite))) {
+                    moviesAdapter.setMovies(moviesBeans);
+                }
+            }
+        });
+
 
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater=getMenuInflater();
-        inflater.inflate(R.menu.menu,menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.Popular:
                 mainViewModel.Init();
-                moviesAdapter=null;
+                moviesAdapter = null;
                 mainViewModel.getMostPopular();
-                mainViewModel.setType(String.valueOf(R.string.MostPopular));
+                mainViewModel.setType(getString(R.string.MostPopular));
                 return true;
             case R.id.Rating:
                 mainViewModel.Init();
-                moviesAdapter=null;
+                moviesAdapter = null;
                 mainViewModel.getTopRated();
-                mainViewModel.setType(String.valueOf(R.string.TopRate));
-                return  true;
+                mainViewModel.setType(getString(R.string.TopRate));
+                return true;
             case R.id.favourite:
                 mainViewModel.Init();
-                moviesAdapter=null;
-                mainViewModel.getFavourite();
-                mainViewModel.setType(String.valueOf(R.string.Favourite));
+                moviesAdapter = null;
+                getFavourite();
+                mainViewModel.setType(getString(R.string.Favourite));
             default:
                 return true;
         }
 
     }
 
+    public void getFavourite() {
+
+        if(favourite.isEmpty())
+            Toast.makeText(this, "no favourite movies yet", Toast.LENGTH_SHORT).show();
+        if (moviesAdapter == null) {
+            moviesAdapter = new MoviesAdapter(MainActivity.this, favourite);
+            recyclerView.setAdapter(moviesAdapter);
+        } else
+            moviesAdapter.setMovies(favourite);
+    }
     /*
     void getTopRated(){
 

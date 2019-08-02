@@ -10,7 +10,7 @@ public interface getData  {
     String Lang="en-US";
     String PosterBaseURL="http://image.tmdb.org/t/p/w300/";
     String Base_URL="https://api.themoviedb.org/3/movie/";
-    String API_KEY="d843caeee3e1633981a6df862700bcbe";
+    String API_KEY="API_KEY";
 
     @GET("top_rated?api_key="+ API_KEY +"&language="+Lang)
     Call<Movies> TopRatedMovies(@Query("page") String page);

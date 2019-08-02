@@ -5,6 +5,8 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 
 import com.example.movies.API.Movies;
 import com.example.movies.API.getData;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -21,8 +24,8 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
 
     private Context context;
     private List<Movies.MoviesBean> movies;
-    public static int Position=0;
-    public MoviesAdapter(Context context, List<Movies.MoviesBean> movies) {
+
+    public MoviesAdapter(Context context, List<Movies.MoviesBean> movies)       {
         this.context = context;
         this.movies = movies;
     }
@@ -38,8 +41,18 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
     @Override
     public void onBindViewHolder(@NonNull MoviesViewHolder ViewHolder, final int position) {
 
-        Position=position;
-        Picasso.get().load(getData.PosterBaseURL+movies.get(position).getPoster_path()).into(ViewHolder.Poster);
+        Picasso.get().load(getData.PosterBaseURL+movies.get(position).getPoster_path())
+                .error(R.drawable.default_img).into(ViewHolder.Poster, new Callback() {
+            @Override
+            public void onSuccess() {
+
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Log.d("AdapterImg",e.getMessage());
+            }
+        });
         ViewHolder.Name.setText(movies.get(position).getTitle()+"\n("+movies.get(position).getRelease_year()+")");
         ViewHolder.Rate.setText(String.valueOf(movies.get(position).getVote_average()));
 
@@ -79,5 +92,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
 
     public void setMovies(List<Movies.MoviesBean> movies) {
         this.movies = movies;
+        notifyDataSetChanged();
     }
 }

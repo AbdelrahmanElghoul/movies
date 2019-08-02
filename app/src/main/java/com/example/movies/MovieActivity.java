@@ -76,7 +76,17 @@ public class MovieActivity extends AppCompatActivity {
         Picasso.get()
                 .load(getData.PosterBaseURL+movies.getPoster_path())
                 .error(R.drawable.default_img)
-                .into(Poster);
+                .into(Poster, new Callback() {
+                    @Override
+                    public void onSuccess() {
+
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        Log.d(TAG,e.getMessage());
+                    }
+                });
         setTitle(movies.getTitle());
         Title.setText(movies.getTitle() );
 
