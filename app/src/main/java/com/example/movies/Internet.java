@@ -23,9 +23,8 @@ public class Internet {
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
             }
-
         }
-        Log.d( "Interent", "No network available!" );
+        Log.d( "Internet", "No network available!" );
         return false;
     }
 
@@ -33,8 +32,6 @@ public class Internet {
         ConnectivityManager connectivityManager
                 = (ConnectivityManager) context.getSystemService( Context.CONNECTIVITY_SERVICE );
 
-
-        Log.e( "Network", String.valueOf( connectivityManager.getActiveNetworkInfo() != null ) );
         return connectivityManager.getActiveNetworkInfo() != null;
     }
 

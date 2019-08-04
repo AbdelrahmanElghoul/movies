@@ -1,12 +1,14 @@
 package com.example.movies;
 
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -26,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
     MainViewModel mainViewModel;
     List<Movies.MoviesBean> favourite;
     String TAG = MainActivity.class.getSimpleName();
+    GridLayoutManager gridLayoutManager;
+    private final String RV_POSITION_KEY="RV_Pos";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,17 +38,31 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.Recycler);
 
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+        gridLayoutManager=new GridLayoutManager(this,3);
         recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(gridLayoutManager);
         mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         favourite = new ArrayList<>();
-        if (!new Internet().hasInternetAccess(this) || mainViewModel.getType().equals(getString(R.string.Favourite))) {
-            getFavourite();
-        } else if (mainViewModel.getType().equals(getString(R.string.MostPopular)))
-            mainViewModel.getMostPopular();
-        else
-            mainViewModel.getTopRated();
 
+        if(savedInstanceState!=null) {
+            Log.d(TAG,"Instance Restored");
+            int pos=savedInstanceState.getInt(RV_POSITION_KEY,-1);
+            if(mainViewModel.getMovies().getValue()!=null
+                    && !mainViewModel.getMovies().getValue().isEmpty()
+                    && pos > -1){
+                moviesAdapter=new MoviesAdapter(this,mainViewModel.getMovies().getValue());
+                recyclerView.setAdapter(moviesAdapter);
+                recyclerView.scrollToPosition(pos);
+            }
+        }
+
+        if(moviesAdapter==null) {
+            if (!new Internet().hasInternetAccess(this) || mainViewModel.getType().equals(getString(R.string.Favourite))) {
+                mainViewModel.setType(getString(R.string.Favourite));
+                getFavourite();
+            } else
+                mainViewModel.getMoviesAPI();
+        }
         mainViewModel.getMovies().observe(this, new Observer<List<Movies.MoviesBean>>() {
             @Override
             public void onChanged(List<Movies.MoviesBean> moviesBeans) {
@@ -60,19 +78,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         mainViewModel.getFavourite().observe(this, new Observer<List<Movies.MoviesBean>>() {
             @Override
             public void onChanged(List<Movies.MoviesBean> moviesBeans) {
                 favourite = moviesBeans;
                 Log.d(TAG, "Favourite Listener size " + moviesBeans.size());
                 if (mainViewModel.getType().equals(getString(R.string.Favourite))) {
-                    moviesAdapter.setMovies(moviesBeans);
+                    moviesAdapter.setMovies(favourite);
                 }
             }
         });
 
-
+        recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(gridLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                mainViewModel.getMoviesAPI();
+            }
+        });
     }
 
     @Override
@@ -89,136 +111,42 @@ public class MainActivity extends AppCompatActivity {
             case R.id.Popular:
                 mainViewModel.Init();
                 moviesAdapter = null;
-                mainViewModel.getMostPopular();
                 mainViewModel.setType(getString(R.string.MostPopular));
+                mainViewModel.getMoviesAPI();
                 return true;
             case R.id.Rating:
                 mainViewModel.Init();
                 moviesAdapter = null;
-                mainViewModel.getTopRated();
                 mainViewModel.setType(getString(R.string.TopRate));
+                mainViewModel.getMoviesAPI();
                 return true;
             case R.id.favourite:
                 mainViewModel.Init();
                 moviesAdapter = null;
-                getFavourite();
                 mainViewModel.setType(getString(R.string.Favourite));
+                getFavourite();
             default:
                 return true;
         }
 
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        if(moviesAdapter!=null && moviesAdapter.getItemCount()>0){
+            outState.putInt(RV_POSITION_KEY,gridLayoutManager.findFirstVisibleItemPosition());
+            Log.d(TAG,"RV Pos "+gridLayoutManager.findFirstVisibleItemPosition());
+        }
+    }
+
     public void getFavourite() {
 
-        if(favourite.isEmpty())
-            Toast.makeText(this, "no favourite movies yet", Toast.LENGTH_SHORT).show();
         if (moviesAdapter == null) {
             moviesAdapter = new MoviesAdapter(MainActivity.this, favourite);
             recyclerView.setAdapter(moviesAdapter);
         } else
             moviesAdapter.setMovies(favourite);
     }
-    /*
-    void getTopRated(){
-
-        Retrofit retrofit=new Retrofit.Builder()
-                .baseUrl(getData.Base_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        getData data=retrofit.create(getData.class);
-        call=data.TopRatedMovies(String.valueOf(mainViewModel.getPage()));
-
-        call.enqueue(new Callback<Movies>() {
-            @Override
-            public void onResponse(Call<Movies> call, Response<Movies> response) {
-                Movies moviesCall=response.body();
-                if(moviesCall==null)
-                    return;
-                moviesBeansList.addAll(moviesCall.getResults());
-
-                if(moviesAdapter!=null && moviesCall.getPage()!=1)
-                   moviesAdapter.notifyDataSetChanged();
-                else{
-                    moviesAdapter=new MoviesAdapter(MainActivity.this,moviesBeansList);
-                    recyclerView.setAdapter(moviesAdapter);
-                }
-
-                if(moviesCall.getTotal_pages()==moviesCall.getPage())
-                    return;
-                else {
-                    mainViewModel.setPage(mainViewModel.getPage()+1);
-                    getTopRated();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Movies> call, Throwable t) {
-
-                if(call.isCanceled())
-                    return;
-                Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.e("TopRatedError",t.getMessage());
-            }
-        });
-    }
-
-    void getMostPopular(){
-        Retrofit retrofit=new Retrofit.Builder()
-                .baseUrl(getData.Base_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        getData data=retrofit.create(getData.class);
-        call=data.MostPopularMovies(String.valueOf(mainViewModel.getPage()));
-
-        call.enqueue(new Callback<Movies>() {
-            @Override
-            public void onResponse(Call<Movies> call, Response<Movies> response) {
-                Movies moviesCall=response.body();
-
-                if(moviesCall==null)
-                    return;
-               moviesBeansList.addAll(moviesCall.getResults());
-
-                if(moviesAdapter!=null && moviesCall.getPage()!=1)
-                     moviesAdapter.notifyDataSetChanged();
-                else{
-                    moviesAdapter=new MoviesAdapter(MainActivity.this,moviesBeansList);
-                    recyclerView.setAdapter(moviesAdapter);
-                }
-
-                if(moviesCall.getTotal_pages()==moviesCall.getPage())
-                    return;
-                else {
-                    mainViewModel.setPage(mainViewModel.getPage()+1);
-                    getMostPopular();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Movies> call, Throwable t) {
-                if(call.isCanceled())
-                    return;
-
-                Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.e("MostPopularError",t.getMessage());
-            }
-        });
-    }
-
-    void getFavourite(){
-        if(mainViewModel.getMovies().getValue()==null || mainViewModel.getMovies().getValue().isEmpty())
-            Toast.makeText(this, "no img_favourite movie yet", Toast.LENGTH_SHORT).show();
-        mainViewModel.getMovies().observe(this, new Observer<List<Movies.MoviesBean>>() {
-            @Override
-            public void onChanged(List<Movies.MoviesBean> moviesBeans) {
-                if(mainViewModel.getType().equals(getString(R.string.Favourite))){
-                    recyclerView.setAdapter(new MoviesAdapter(getApplicationContext(),moviesBeans));
-                }
-            }
-        });
-    }
-*/
 }

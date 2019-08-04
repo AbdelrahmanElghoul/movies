@@ -12,11 +12,9 @@ public interface getData  {
     String Base_URL="https://api.themoviedb.org/3/movie/";
     String API_KEY="API_KEY";
 
-    @GET("top_rated?api_key="+ API_KEY +"&language="+Lang)
-    Call<Movies> TopRatedMovies(@Query("page") String page);
-
-    @GET("popular?api_key="+ API_KEY +"&language="+Lang)
-    Call<Movies> MostPopularMovies(@Query("page") String page);
+    @GET("{sort_by}?api_key="+ API_KEY +"&language="+Lang)
+    Call<Movies> getMovies(@Path("sort_by") String sort_by,
+                           @Query("page") String page);
 
     @GET("{id}/videos?api_key="+API_KEY)
     Call<Videos> Videos(@Path("id") String id);

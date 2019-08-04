@@ -71,13 +71,12 @@ public class MainViewModel extends AndroidViewModel {
         Init();
     }
 
-
     public LiveData<List<Movies.MoviesBean>> getMovies() {
         return movies;
     }
 
-    public void getTopRated(){
-        Log.d(TAG,"TopRated "+getPage());
+    public void getMoviesAPI(){
+        Log.d(TAG,"MoviesAPI "+getType()+" "+getPage());
 
         Retrofit retrofit=new Retrofit.Builder()
                 .baseUrl(getData.Base_URL)
@@ -85,7 +84,7 @@ public class MainViewModel extends AndroidViewModel {
                 .build();
 
         getData data=retrofit.create(getData.class);
-        call=data.TopRatedMovies(String.valueOf(getPage()));
+        call=data.getMovies(this.getType(),String.valueOf(getPage()));
         call.enqueue(new Callback<Movies>() {
             @Override
             public void onResponse(Call<Movies> call, Response<Movies> response) {
@@ -97,14 +96,10 @@ public class MainViewModel extends AndroidViewModel {
                  tmp.addAll(movies.getValue());
                 tmp.addAll(moviesCall.getResults());
                 movies.setValue(tmp);
-
                 if(moviesCall.getTotal_pages()==moviesCall.getPage() || call.isCanceled())
                     return;
-                else
-                    {
-                    setPage(getPage()+1);
-                    getTopRated();
-                }
+
+                setPage(getPage()+1);
             }
 
             @Override
@@ -113,51 +108,11 @@ public class MainViewModel extends AndroidViewModel {
                 if(call.isCanceled())
                     return;
                 Toast.makeText(getApplication(), t.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.e("TopRatedError",t.getMessage());
+                Log.e("getMoviesAPI",t.getMessage());
             }
         });
     }
-    public void getMostPopular(){
-        Log.d(TAG,"MostPopular "+getPage());
-        Retrofit retrofit=new Retrofit.Builder()
-                .baseUrl(getData.Base_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
-        getData data=retrofit.create(getData.class);
-        call=data.MostPopularMovies(String.valueOf(getPage()));
-
-        call.enqueue(new Callback<Movies>() {
-            @Override
-            public void onResponse(Call<Movies> call, Response<Movies> response) {
-                Movies moviesCall=response.body();
-                if(moviesCall==null)
-                    return;
-                List<Movies.MoviesBean> tmp=new ArrayList<>();
-                if(page>1)
-                    tmp.addAll(movies.getValue());
-                tmp.addAll(moviesCall.getResults());
-                movies.setValue(tmp);
-
-                if(moviesCall.getTotal_pages()==moviesCall.getPage() || call.isCanceled())
-                    return;
-                else {
-                    setPage(getPage()+1);
-                    getMostPopular();
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<Movies> call, Throwable t) {
-                if(call.isCanceled())
-                    return;
-
-                Toast.makeText(getApplication(), t.getMessage(), Toast.LENGTH_SHORT).show();
-                Log.e("MostPopularError",t.getMessage());
-            }
-        });
-    }
     public LiveData<List<Movies.MoviesBean>> getFavourite(){
        return Favourite;
     }

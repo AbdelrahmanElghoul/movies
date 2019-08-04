@@ -19,7 +19,7 @@
     <string name="Site">site</string>
     <string name="video">trailer</string>
 
-    <string name="MostPopular">Most popular</string>
-    <string name="TopRate">Top Rated</string>
+    <string name="MostPopular">popular</string>
+    <string name="TopRate">top_rated</string>
     <string name="Favourite">Favourite</string>
 </resources>

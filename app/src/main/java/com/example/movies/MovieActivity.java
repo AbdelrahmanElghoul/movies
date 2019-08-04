@@ -3,11 +3,13 @@ package com.example.movies;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.movies.API.Movies;
@@ -100,6 +102,15 @@ public class MovieActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return false;
+    }
+
     public void btnReviews(View view) {
         if(!new Internet().hasInternetAccess(this))
         {
@@ -143,5 +154,6 @@ public class MovieActivity extends AppCompatActivity {
         });
 
     }
+
 
 }
