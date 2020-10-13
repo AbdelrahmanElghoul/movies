@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/details_card"
+        android:layout_width="match_parent"
+        android:layout_margin="@dimen/average_margin_padding"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/light_background"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="wrap_content">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_margin="@dimen/low_margin_padding"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/MovieThumbnail"
+                android:layout_width="@dimen/Extra_large_icon_width_height"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:src="@drawable/default_img"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/Titletxt"
+                android:layout_width="0dp"
+                android:textStyle="bold"
+                style="@style/movie_detail"
+                app:layout_constraintStart_toEndOf="@id/MovieThumbnail"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:hint="@string/Title"
+
+                app:layout_constraintEnd_toEndOf="parent"
+
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/Languagetxt"
+                android:layout_width="0dp"
+                style="@style/movie_detail"
+                app:layout_constraintStart_toEndOf="@id/MovieThumbnail"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:hint="@string/Language"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/Ratingtxt" />
+
+            <TextView
+                android:id="@+id/OriginalNametxt"
+                android:layout_width="0dp"
+                style="@style/movie_detail"
+                app:layout_constraintStart_toEndOf="@id/MovieThumbnail"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:gravity="left"
+                android:hint="@string/Original_Name"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/Titletxt" />
+
+
+            <TextView
+                android:id="@+id/ReleaseDatetxt"
+                android:layout_width="0dp"
+                style="@style/movie_detail"
+                app:layout_constraintStart_toEndOf="@id/MovieThumbnail"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:hint="@string/Release_Date"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/OriginalNametxt" />
+
+
+            <TextView
+                android:id="@+id/Ratingtxt"
+                android:layout_width="0dp"
+                style="@style/movie_detail"
+                app:layout_constraintStart_toEndOf="@id/MovieThumbnail"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:hint="@string/Rating"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ReleaseDatetxt" />
+
+            <TextView
+                android:id="@+id/Adulttxt"
+                android:layout_width="0dp"
+                style="@style/movie_detail"
+                app:layout_constraintStart_toEndOf="@id/MovieThumbnail"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:hint="@string/Adult"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/Languagetxt" />
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/btn_favourite"
+                android:src="@drawable/unfavourite"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+
+                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_margin="@dimen/average_margin_padding"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/details_card"
+        app:layout_constraintBottom_toTopOf="@id/btn_reviews"
+        android:layout_height="0dp">
+    <TextView
+        android:id="@+id/Overview"
+        android:layout_width="match_parent"
+        style="@style/default_txt"
+        android:padding="@dimen/low_margin_padding"
+        android:layout_height="0dp"
+        android:hint="@string/Overview" />
+
+    </ScrollView>
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_reviews"
+        android:hint="@string/Reviews"
+        style="@style/button"
+        android:onClick="btnReviews"
+        app:layout_constraintBottom_toTopOf="@id/btn_trailers"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:id="@+id/btn_trailers"
+        style="@style/button"
+        android:onClick="btnTrailers"
+        android:hint="@string/video"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="wrap_content" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
