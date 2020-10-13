@@ -7,6 +7,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,7 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewsV
         reviewsViewHolder.Review.setText(reviewsList.get(i).getContent());
 
         reviewsViewHolder.Review.setMovementMethod(new ScrollingMovementMethod());
+
     }
 
     @Override

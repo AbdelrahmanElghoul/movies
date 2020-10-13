@@ -10,7 +10,7 @@ public interface getData  {
     String Lang="en-US";
     String PosterBaseURL="http://image.tmdb.org/t/p/w300/";
     String Base_URL="https://api.themoviedb.org/3/movie/";
-    String API_KEY="API_KEY";
+    String API_KEY="YOUR_API_KEY";
 
     @GET("{sort_by}?api_key="+ API_KEY +"&language="+Lang)
     Call<Movies> getMovies(@Path("sort_by") String sort_by,

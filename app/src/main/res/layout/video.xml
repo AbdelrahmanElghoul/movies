@@ -4,17 +4,16 @@
     android:layout_height="wrap_content"
     android:id="@+id/video_card"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="10dp">
+    android:layout_margin="@dimen/average_margin_padding">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:padding="3dp"
+        android:layout_margin="@dimen/average_margin_padding"
         android:layout_height="wrap_content">
 
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_margin="3dp"
+            android:layout_width="@dimen/average_icon_width_height"
+            android:layout_height="@dimen/average_icon_width_height"
             android:src="@drawable/video"
             android:id="@+id/video_img"
             android:scaleType="fitCenter"
@@ -25,23 +24,23 @@
 
             <TextView
                 android:layout_width="0dp"
+
                 android:layout_height="wrap_content"
-                android:layout_margin="3dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:gravity="start"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="@id/video_type"
+                app:layout_constraintTop_toBottomOf="@id/video_type"
                 android:id="@+id/video_name"
-                app:layout_constraintStart_toEndOf="@id/video_img"
                 android:hint="@string/Name"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:paddingStart="@dimen/average_margin_padding"
             android:layout_height="wrap_content"
             android:hint="@string/Type"
-            android:layout_margin="3dp"
             android:id="@+id/video_type"
-            app:layout_constraintLeft_toRightOf="@id/video_img"
-            app:layout_constraintTop_toBottomOf="@id/video_name"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/video_img"
+            />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

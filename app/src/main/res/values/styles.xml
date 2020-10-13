@@ -8,4 +8,30 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="movie_detail">
+        <item name="android:textAlignment">textStart</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:textSize">@dimen/normal_text_size</item>
+        <item name="android:layout_marginTop">@dimen/low_margin_padding</item>
+        <item name="android:layout_marginBottom">@dimen/low_margin_padding</item>
+    </style>
+
+    <style name="default_txt">
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:textSize">@dimen/header_text_size</item>
+        <item name="android:layout_marginTop">@dimen/low_margin_padding</item>
+        <item name="android:layout_marginBottom">@dimen/low_margin_padding</item>
+    </style>
+
+    <style name="button">
+        <item name="android:textAlignment">center</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColorHint">@color/button_text_color</item>
+        <item name="android:background">@color/button_color</item>
+        <item name="android:textSize">@dimen/normal_text_size</item>
+        <item name="android:layout_marginStart">@dimen/high_margin_padding</item>
+        <item name="android:layout_marginEnd">@dimen/high_margin_padding</item>
+        <item name="android:layout_marginTop">@dimen/average_margin_padding</item>
+        <item name="android:layout_marginBottom">@dimen/high_margin_padding</item>
+    </style>
 </resources>
